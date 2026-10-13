@@ -1,0 +1,30 @@
+{
+  "admins": [
+    {
+      "id": "ADM-AYUSH-01",
+      "name": "Ayush Jaiswal",
+      "email": "ayushjaiswal272008@gmail.com",
+      "role": "admin",
+      "designation": "Chief System Administrator & ERP Head",
+      "department": "Central ERP & Operations Directorate",
+      "phone": "+91 98710 22301",
+      "passwordHash": "d159ecfd306a9bbe25ddfc1fcf71193928ec21b53e359b65a621843c393cfd42dc612dc1e93ca4c4388971be2a69d475004a947da83fca90fafd1443b023c57f",
+      "salt": "a37cff0a1102e7bd1a97ab61cd1935dc",
+      "registeredAt": "2026-10-09T16:00:59.900Z",
+      "isPrimary": true
+    },
+    {
+      "id": "ADM-FRIEND-02",
+      "name": "Rahul Sharma",
+      "email": "rahul.friend@gniot.net.in",
+      "role": "admin",
+      "designation": "Associate Admin (Hostel Facilities)",
+      "department": "Campus Estate & Facilities",
+      "phone": "+91 98710 22302",
+      "passwordHash": "6656775534624fbaad0fefd46b538eb709382ff51a930354f1919cbd0723be27a343d4f93789b3e9a7d82d7938d96f33c96e30bec215b12d966f7026f5a8fe90",
+      "salt": "45edcfc7171f6086504abd34ce0880da",
+      "registeredAt": "2026-10-09T16:02:50.206Z",
+      "isPrimary": false
+    }
+  ]
+}

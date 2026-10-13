@@ -1,0 +1,7 @@
+{
+  "name": "Campus Fix",
+  "description": "GNIOT Group of Institutions Official Campus Maintenance Complaint & ERP Tracking System for students, staff, and administrators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
