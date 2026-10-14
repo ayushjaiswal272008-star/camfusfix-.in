@@ -67,7 +67,13 @@
       --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      position: relative;
+    }
     body {
       font-family: var(--font-sans);
       background-color: var(--bg-page);
@@ -77,16 +83,41 @@
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
+    #app {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    img, svg {
+      max-width: 100%;
+      height: auto;
+    }
+
     .tabular-nums { font-variant-numeric: tabular-nums; }
     .font-mono { font-family: var(--font-mono); }
     
     /* Layout utilities */
     .container-custom {
+      width: 100%;
       max-width: 1240px;
       margin-left: auto;
       margin-right: auto;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+      box-sizing: border-box;
+    }
+    @media (max-width: 640px) {
+      .container-custom {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+    @media (max-width: 360px) {
+      .container-custom {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
     }
 
     /* Buttons */
@@ -249,6 +280,42 @@
       gap: 0.75rem;
     }
 
+    @media (max-width: 640px) {
+      .modal-backdrop {
+        padding: 0.5rem;
+      }
+      .modal-content {
+        max-height: 95vh;
+        border-radius: var(--radius-lg);
+      }
+      .modal-header {
+        padding: 1rem 1.15rem;
+      }
+      .modal-body {
+        padding: 1.15rem 1rem;
+      }
+      .modal-footer {
+        padding: 0.85rem 1rem;
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+      }
+      .modal-footer .btn {
+        width: 100%;
+      }
+    }
+
+    .form-row-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 540px) {
+      .form-row-2col {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
+      }
+    }
+
     /* Toast */
     #toast-container {
       position: fixed;
@@ -341,13 +408,110 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(248, 250, 252, 0.9);
+      background: rgba(248, 250, 252, 0.95);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border-color);
       transition: background-color 0.2s ease;
+      width: 100%;
+      max-width: 100%;
     }
     html.dark .navbar {
-      background: rgba(11, 17, 32, 0.9);
+      background: rgba(11, 17, 32, 0.95);
+    }
+    .desktop-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .desktop-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .mobile-header-actions {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    @media (max-width: 1023px) {
+      .desktop-nav-links {
+        display: none !important;
+      }
+      .desktop-right-actions {
+        display: none !important;
+      }
+      .mobile-header-actions {
+        display: flex !important;
+      }
+    }
+    @media (max-width: 380px) {
+      .brand-subtext {
+        display: none !important;
+      }
+      .mobile-report-text {
+        display: none !important;
+      }
+      .mobile-quick-report-btn {
+        padding: 0.4rem 0.5rem !important;
+      }
+    }
+
+    /* Mobile Drawer */
+    .mobile-nav-drawer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-color);
+      padding: 1.15rem 1rem;
+      box-shadow: var(--shadow-lg);
+      max-height: calc(100vh - 65px);
+      overflow-y: auto;
+      animation: mobileNavSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes mobileNavSlideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mobile-nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-color);
+      transition: color 0.15s ease;
+    }
+    .mobile-nav-link:last-child {
+      border-bottom: none;
+    }
+    .mobile-nav-link:hover {
+      color: var(--primary);
+    }
+
+    /* Notification Tray Popover (Desktop & Mobile) */
+    .notif-tray-popover {
+      display: none;
+      position: absolute;
+      right: 1.5rem;
+      top: 64px;
+      width: 380px;
+      max-width: calc(100vw - 2rem);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      z-index: 1100;
+      overflow: hidden;
+    }
+    @media (max-width: 640px) {
+      .notif-tray-popover {
+        right: 0.5rem !important;
+        left: 0.5rem !important;
+        width: auto !important;
+        max-width: calc(100vw - 1rem) !important;
+        top: 60px !important;
+      }
     }
 
     /* Table styles */
@@ -375,26 +539,178 @@
       background: var(--bg-surface-subtle);
     }
 
-    /* Responsive Grid */
+    /* Responsive Grid & Hero Styles */
+    .hero-section {
+      padding: 4.5rem 0 3.5rem 0;
+      background: radial-gradient(circle at 10% 20%, rgba(37,99,235,0.06) 0%, transparent 60%);
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    @media (max-width: 960px) {
+      .hero-section {
+        padding: 3rem 0 2.25rem 0;
+      }
+    }
+    @media (max-width: 640px) {
+      .hero-section {
+        padding: 2rem 0 1.5rem 0;
+      }
+    }
+
     .grid-hero {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
       gap: 3rem;
       align-items: center;
+      width: 100%;
+      max-width: 100%;
     }
     @media (max-width: 960px) {
       .grid-hero { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    @media (max-width: 480px) {
+      .grid-hero { gap: 1.5rem; }
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-bottom: 2.25rem;
+      width: 100%;
+    }
+    @media (max-width: 640px) {
+      .hero-cta-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.65rem;
+        margin-bottom: 1.75rem;
+      }
+      .hero-cta-group .btn {
+        width: 100%;
+        padding: 0.65rem 0.75rem !important;
+        font-size: 0.85rem !important;
+        justify-content: center;
+      }
+    }
+    @media (max-width: 420px) {
+      .hero-cta-group {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+      }
+    }
+
+    .hero-dispatch-card {
+      padding: 1.5rem;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-color);
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 640px) {
+      .hero-dispatch-card {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+      }
+    }
+    @media (max-width: 360px) {
+      .hero-dispatch-card {
+        padding: 0.85rem;
+      }
+    }
+
+    .mockup-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      width: 100%;
+    }
+    @media (max-width: 480px) {
+      .mockup-stats-grid {
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+      }
+      .mockup-stat-box {
+        padding: 0.5rem 0.25rem !important;
+      }
+      .mockup-stat-val {
+        font-size: 1.15rem !important;
+      }
+      .mockup-stat-lbl {
+        font-size: 0.62rem !important;
+      }
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+    }
+    @media (max-width: 860px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .cta-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, #071f4a 100%);
+      color: #fff;
+      padding: 3.5rem 2rem;
+      border-radius: var(--radius-xl);
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 640px) {
+      .cta-banner {
+        padding: 2.25rem 1.25rem;
+        border-radius: var(--radius-lg);
+      }
+      .cta-banner-buttons {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+      }
+      .cta-banner-buttons .btn {
+        width: 100% !important;
+      }
     }
 
     .admin-layout {
       display: grid;
       grid-template-columns: 260px 1fr;
       min-height: calc(100vh - 65px);
+      width: 100%;
+      max-width: 100%;
     }
     @media (max-width: 860px) {
       .admin-layout { grid-template-columns: 1fr; }
       .admin-sidebar { display: none; }
-      .admin-sidebar.mobile-open { display: block; position: fixed; inset: 0; z-index: 500; width: 280px; }
+      .admin-sidebar.mobile-open {
+        display: flex !important;
+        position: fixed;
+        inset: 0;
+        z-index: 1200;
+        width: 290px;
+        max-width: 85vw;
+        box-shadow: var(--shadow-lg);
+      }
+      .admin-sidebar-backdrop {
+        display: block !important;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        z-index: 1199;
+      }
     }
 
     /* Technician Calendar Schedule Styles */
@@ -945,7 +1261,7 @@
     // Session helpers
     function getSession() {
       try {
-        const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+        const raw = localStorage.getItem(SESSION_STORAGE_KEY) || sessionStorage.getItem(SESSION_STORAGE_KEY);
         return raw ? JSON.parse(raw) : null;
       } catch (e) {
         return null;
@@ -954,11 +1270,12 @@
 
     function setSession(role, user) {
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ role, user }));
+      try { sessionStorage.removeItem(SESSION_STORAGE_KEY); } catch (e) {}
       updateNavSession();
     }
 
     function clearSession() {
-      const token = localStorage.getItem('campusfix_admin_token');
+      const token = localStorage.getItem('campusfix_admin_token') || sessionStorage.getItem('campusfix_admin_token');
       if (token) {
         fetch('/api/admin/logout', {
           method: 'POST',
@@ -966,8 +1283,10 @@
           body: JSON.stringify({ token })
         }).catch(() => {});
         localStorage.removeItem('campusfix_admin_token');
+        try { sessionStorage.removeItem('campusfix_admin_token'); } catch (e) {}
       }
       localStorage.removeItem(SESSION_STORAGE_KEY);
+      try { sessionStorage.removeItem(SESSION_STORAGE_KEY); } catch (e) {}
       showToast('Logged out', 'You have been successfully signed out.', 'info');
       setView('landing');
       updateNavSession();
@@ -990,11 +1309,18 @@
     }
 
     function updateThemeIcon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = isDark ? iconSvg('sun', 17) : iconSvg('moon', 17);
+      const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
       const btn = document.getElementById('theme-toggle-btn');
       if (btn) {
-        const isDark = document.documentElement.classList.contains('dark');
-        btn.innerHTML = isDark ? iconSvg('sun', 18) : iconSvg('moon', 18);
-        btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        btn.innerHTML = icon;
+        btn.setAttribute('aria-label', label);
+      }
+      const mobBtn = document.getElementById('mobile-theme-toggle-btn');
+      if (mobBtn) {
+        mobBtn.innerHTML = icon;
+        mobBtn.setAttribute('aria-label', label);
       }
     }
 
@@ -1117,15 +1443,17 @@
 
     function updateNotificationBadge() {
       const db = getDB();
-      const badge = document.getElementById('notif-badge-count');
       const unreadCount = db.notifications.filter(n => !n.read).length;
+      const countText = unreadCount > 9 ? '9+' : unreadCount;
+      const badge = document.getElementById('notif-badge-count');
       if (badge) {
-        if (unreadCount > 0) {
-          badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-          badge.style.display = 'inline-flex';
-        } else {
-          badge.style.display = 'none';
-        }
+        badge.textContent = countText;
+        badge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+      }
+      const mobileBadge = document.getElementById('mobile-notif-badge-count');
+      if (mobileBadge) {
+        mobileBadge.textContent = countText;
+        mobileBadge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
       }
     }
 
@@ -1210,7 +1538,8 @@
         'message-square': `<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>`,
         'send': `<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>`,
         'bot': `<rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/>`,
-        'sparkles': `<path d="M12 3l1.912 5.885L19.798 10.8 13.912 12.715 12 18.6l-1.912-5.885L4.202 10.8l5.886-1.915L12 3z"/>`
+        'sparkles': `<path d="M12 3l1.912 5.885L19.798 10.8 13.912 12.715 12 18.6l-1.912-5.885L4.202 10.8l5.886-1.915L12 3z"/>`,
+        'menu': `<line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>`
       };
       const path = icons[name] || icons['info'];
       return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}">${path}</svg>`;
@@ -1680,7 +2009,30 @@
 
     function setAdminTab(tab) {
       adminActiveTab = tab;
+      closeAdminSidebar();
       renderApp();
+    }
+
+    function toggleAdminSidebar() {
+      const sb = document.querySelector('.admin-sidebar');
+      const bd = document.getElementById('admin-sidebar-backdrop');
+      if (sb) {
+        const isOpen = sb.classList.contains('mobile-open');
+        if (isOpen) {
+          sb.classList.remove('mobile-open');
+          if (bd) bd.style.display = 'none';
+        } else {
+          sb.classList.add('mobile-open');
+          if (bd) bd.style.display = 'block';
+        }
+      }
+    }
+
+    function closeAdminSidebar() {
+      const sb = document.querySelector('.admin-sidebar');
+      const bd = document.getElementById('admin-sidebar-backdrop');
+      if (sb) sb.classList.remove('mobile-open');
+      if (bd) bd.style.display = 'none';
     }
 
     // Admin Dashboard Renderer
@@ -1696,12 +2048,20 @@
 
       return `
         <div class="admin-layout">
+          <!-- Mobile Backdrop -->
+          <div id="admin-sidebar-backdrop" class="admin-sidebar-backdrop" style="display:none;" onclick="closeAdminSidebar()"></div>
+
           <!-- Sidebar -->
           <aside class="admin-sidebar" style="background:var(--bg-surface);border-right:1px solid var(--border-color);padding:1.5rem 1rem;display:flex;flex-direction:column;justify-content:space-between;">
             <div>
-              <div style="padding:0 0.5rem 1.25rem 0.5rem;border-bottom:1px solid var(--border-color);margin-bottom:1rem;">
-                <div style="font-weight:800;font-size:1.05rem;color:var(--primary);">Admin Control Center</div>
-                <div style="font-size:0.75rem;color:var(--text-muted);">${escapeHtml(db.settings.campusName)}</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:0 0.5rem 1.25rem 0.5rem;border-bottom:1px solid var(--border-color);margin-bottom:1rem;">
+                <div>
+                  <div style="font-weight:800;font-size:1.05rem;color:var(--primary);">Admin Control Center</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);">${escapeHtml(db.settings.campusName)}</div>
+                </div>
+                <button onclick="closeAdminSidebar()" class="btn btn-secondary btn-sm" style="padding:0.35rem;" id="admin-close-sidebar-btn" title="Close Menu">
+                  ${iconSvg('x', 16)}
+                </button>
               </div>
 
               <nav style="display:flex;flex-direction:column;gap:0.35rem;">
@@ -1740,8 +2100,35 @@
           </aside>
 
           <!-- Main Viewport for Admin Tab -->
-          <div style="padding: 2rem 2.5rem; overflow-y:auto; background:var(--bg-page);">
-            ${renderAdminTabContent(adminActiveTab, db)}
+          <div style="min-width:0;width:100%;overflow-x:hidden;">
+            <!-- Mobile Admin Header -->
+            <div style="display:none;padding:0.75rem 1rem;background:var(--bg-surface);border-bottom:1px solid var(--border-color);align-items:center;justify-content:space-between;" class="admin-mobile-header">
+              <div style="display:flex;align-items:center;gap:0.6rem;">
+                <button onclick="toggleAdminSidebar()" class="btn btn-secondary btn-sm" style="padding:0.4rem 0.55rem;" title="Toggle Admin Navigation">
+                  ${iconSvg('menu', 16)}
+                </button>
+                <span style="font-weight:800;font-size:0.95rem;text-transform:capitalize;">Admin: ${adminActiveTab}</span>
+              </div>
+              <button onclick="clearSession()" class="btn btn-secondary btn-sm" style="padding:0.35rem 0.6rem;font-size:0.75rem;">
+                Exit
+              </button>
+            </div>
+
+            <!-- Horizontal Scrollable Admin Tabs for Mobile -->
+            <div style="display:none;padding:0.5rem 0.75rem;background:var(--bg-surface-subtle);border-bottom:1px solid var(--border-color);overflow-x:auto;white-space:nowrap;gap:0.4rem;" class="admin-mobile-tabs">
+              <button onclick="setAdminTab('dashboard')" class="btn btn-sm ${adminActiveTab==='dashboard'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Dashboard</button>
+              <button onclick="setAdminTab('complaints')" class="btn btn-sm ${adminActiveTab==='complaints'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Complaints (${total})</button>
+              <button onclick="setAdminTab('students')" class="btn btn-sm ${adminActiveTab==='students'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Students</button>
+              <button onclick="setAdminTab('staff')" class="btn btn-sm ${adminActiveTab==='staff'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Staff</button>
+              <button onclick="setAdminTab('categories')" class="btn btn-sm ${adminActiveTab==='categories'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Categories</button>
+              <button onclick="setAdminTab('admins')" class="btn btn-sm ${adminActiveTab==='admins'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Admins (2)</button>
+              <button onclick="setAdminTab('analytics')" class="btn btn-sm ${adminActiveTab==='analytics'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Analytics</button>
+              <button onclick="setAdminTab('settings')" class="btn btn-sm ${adminActiveTab==='settings'?'btn-primary':'btn-secondary'}" style="padding:0.3rem 0.65rem;font-size:0.75rem;">Settings</button>
+            </div>
+
+            <div style="padding: clamp(1rem, 3vw, 2.5rem) clamp(0.75rem, 2.5vw, 2.5rem); overflow-y:auto; background:var(--bg-page);">
+              ${renderAdminTabContent(adminActiveTab, db)}
+            </div>
           </div>
         </div>
       `;
@@ -2652,7 +3039,7 @@
     // Student Dashboard Renderer
     function renderStudentDashboardView() {
       const session = getSession();
-      const student = session && session.user ? session.user : { name: 'Aarav Mehta', email: 'aarav.mehta@gniot.net.in', id: 'GNIOT-2024-CSE-0142', dept: 'Computer Science & Engineering (B.Tech)' };
+      const student = session && session.user ? session.user : { name: 'Student', email: '', id: '', dept: '' };
       const db = getDB();
       const myComplaints = db.complaints.filter(c => c.email.toLowerCase() === student.email.toLowerCase() || c.studentId === student.id || c.studentName === student.name);
       
@@ -2804,7 +3191,7 @@
     // Complaint History Renderer
     function renderComplaintHistoryView() {
       const session = getSession();
-      const student = session && session.user ? session.user : { name: 'Aarav Mehta', email: 'aarav.mehta@gniot.net.in', id: 'GNIOT-2024-CSE-0142' };
+      const student = session && session.user ? session.user : { name: 'Student', email: '', id: '' };
       const db = getDB();
       
       let items = db.complaints;
@@ -2952,25 +3339,25 @@
 
       return `
         <!-- Hero Section -->
-        <section style="padding: 4.5rem 0 3.5rem 0; background: radial-gradient(circle at 10% 20%, rgba(37,99,235,0.06) 0%, transparent 60%);">
+        <section class="hero-section">
           <div class="container-custom">
             <div class="grid-hero">
               <!-- Left: Content -->
-              <div>
-                <div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.25rem 0.75rem;background:var(--primary-subtle);color:var(--primary);border-radius:100px;font-size:0.75rem;font-weight:700;margin-bottom:1.25rem;letter-spacing:0.02em;">
+              <div style="min-width:0;">
+                <div style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:var(--primary-subtle);color:var(--primary);border-radius:100px;font-size:clamp(0.68rem, 2.4vw, 0.75rem);font-weight:700;margin-bottom:1.25rem;letter-spacing:0.02em;max-width:100%;flex-wrap:wrap;line-height:1.35;">
                   ${iconSvg('shield', 14)} GNIOT GROUP OF INSTITUTIONS &bull; NAAC 'A+' &amp; NBA ACCREDITED
                 </div>
-                <h1 style="font-size:clamp(2.4rem, 4.2vw, 3.8rem);font-weight:800;letter-spacing:-0.035em;line-height:1.08;color:var(--text-main);margin-bottom:1.25rem;text-wrap:balance;">
+                <h1 style="font-size:clamp(1.85rem, 5vw, 3.6rem);font-weight:800;letter-spacing:-0.035em;line-height:1.12;color:var(--text-main);margin-bottom:1.25rem;word-break:break-word;">
                   Smarter Campus.<br />
                   <span style="background:linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Faster Fixes.</span><br />
                   Better Student Experience.
                 </h1>
-                <p style="font-size:1.05rem;line-height:1.65;color:var(--text-muted);margin-bottom:2rem;max-width:540px;">
+                <p style="font-size:clamp(0.9rem, 2.5vw, 1.05rem);line-height:1.65;color:var(--text-muted);margin-bottom:1.75rem;max-width:540px;">
                   Campus Fix makes it simple to report, track, manage, and resolve maintenance issues across GNIOT Group of Institutions — all from one intelligent official ERP platform.
                 </p>
 
                 <!-- Hero CTAs -->
-                <div style="display:flex;flex-wrap:wrap;gap:0.85rem;margin-bottom:2.25rem;">
+                <div class="hero-cta-group">
                   <button onclick="handleReportProblemClick()" class="btn btn-primary" style="padding:0.75rem 1.4rem;font-size:0.95rem;box-shadow:0 4px 14px rgba(37,99,235,0.35);">
                     ${iconSvg('plus', 18)} Report a Problem
                   </button>
@@ -2986,7 +3373,7 @@
                 </div>
 
                 <!-- Trust signals -->
-                <div style="display:flex;align-items:center;gap:1.5rem;font-size:0.825rem;color:var(--text-muted);flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:1.25rem;font-size:0.825rem;color:var(--text-muted);flex-wrap:wrap;">
                   <div style="display:flex;align-items:center;gap:0.4rem;">
                     <span style="color:var(--success);">${iconSvg('check-circle', 16)}</span> Instant Ticket ID
                   </div>
@@ -3000,35 +3387,35 @@
               </div>
 
               <!-- Right: Interactive Hero Dashboard Mockup -->
-              <div>
-                <div class="card" style="padding:1.5rem;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);border-color:var(--border-color);position:relative;">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border-color);">
+              <div style="min-width:0;width:100%;">
+                <div class="card hero-dispatch-card">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border-color);flex-wrap:wrap;gap:0.5rem;">
                     <div style="display:flex;align-items:center;gap:0.5rem;">
-                      <div style="width:10px;height:10px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(34,197,94,0.2);"></div>
+                      <div style="width:10px;height:10px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(34,197,94,0.2);flex-shrink:0;"></div>
                       <span style="font-size:0.85rem;font-weight:700;">Live Campus Dispatch Console</span>
                     </div>
                     <span style="font-size:0.75rem;color:var(--text-muted);font-family:var(--font-mono);">GNIOT-ERP-V2</span>
                   </div>
 
                   <!-- Quick Stats Bar inside Mockup -->
-                  <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:0.75rem;margin-bottom:1.25rem;">
-                    <div style="background:var(--bg-surface-subtle);padding:0.75rem;border-radius:var(--radius-md);text-align:center;">
-                      <div style="font-size:1.35rem;font-weight:800;color:var(--primary);font-family:var(--font-mono);">${total}</div>
-                      <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:0.1rem;">Total Logged</div>
+                  <div class="mockup-stats-grid">
+                    <div class="mockup-stat-box" style="background:var(--bg-surface-subtle);padding:0.75rem;border-radius:var(--radius-md);text-align:center;">
+                      <div class="mockup-stat-val" style="font-size:1.35rem;font-weight:800;color:var(--primary);font-family:var(--font-mono);">${total}</div>
+                      <div class="mockup-stat-lbl" style="font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:0.1rem;">Total Logged</div>
                     </div>
-                    <div style="background:var(--bg-surface-subtle);padding:0.75rem;border-radius:var(--radius-md);text-align:center;">
-                      <div style="font-size:1.35rem;font-weight:800;color:var(--warning);font-family:var(--font-mono);">${inProgress}</div>
-                      <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:0.1rem;">In Progress</div>
+                    <div class="mockup-stat-box" style="background:var(--bg-surface-subtle);padding:0.75rem;border-radius:var(--radius-md);text-align:center;">
+                      <div class="mockup-stat-val" style="font-size:1.35rem;font-weight:800;color:var(--warning);font-family:var(--font-mono);">${inProgress}</div>
+                      <div class="mockup-stat-lbl" style="font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:0.1rem;">In Progress</div>
                     </div>
-                    <div style="background:var(--bg-surface-subtle);padding:0.75rem;border-radius:var(--radius-md);text-align:center;">
-                      <div style="font-size:1.35rem;font-weight:800;color:var(--success);font-family:var(--font-mono);">${resolutionRate}%</div>
-                      <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:0.1rem;">Fixed Rate</div>
+                    <div class="mockup-stat-box" style="background:var(--bg-surface-subtle);padding:0.75rem;border-radius:var(--radius-md);text-align:center;">
+                      <div class="mockup-stat-val" style="font-size:1.35rem;font-weight:800;color:var(--success);font-family:var(--font-mono);">${resolutionRate}%</div>
+                      <div class="mockup-stat-lbl" style="font-size:0.7rem;color:var(--text-muted);font-weight:600;margin-top:0.1rem;">Fixed Rate</div>
                     </div>
                   </div>
 
                   <!-- Active Ticket Spotlight Card -->
-                  <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1.25rem;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+                  <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1.25rem;word-break:break-word;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap;gap:0.35rem;">
                       <span style="font-family:var(--font-mono);font-size:0.8rem;font-weight:700;color:var(--primary);">CF-2026-0001</span>
                       <span class="status-badge status-in-progress">${iconSvg('clock', 12)} In Progress</span>
                     </div>
@@ -3039,16 +3426,16 @@
                     <div style="width:100%;height:6px;background:var(--border-color);border-radius:3px;overflow:hidden;margin-bottom:0.5rem;">
                       <div style="width:70%;height:100%;background:linear-gradient(90deg, var(--primary), #38bdf8);border-radius:3px;"></div>
                     </div>
-                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);">
+                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);flex-wrap:wrap;gap:0.35rem;">
                       <span>Assigned: <strong>Er. Rajesh Sharma</strong></span>
                       <span style="color:var(--success);font-weight:600;">Work in Progress</span>
                     </div>
                   </div>
 
                   <!-- Real-time activity pulse -->
-                  <div style="display:flex;align-items:center;gap:0.6rem;padding:0.65rem 0.85rem;background:var(--primary-subtle);border-radius:var(--radius-md);font-size:0.75rem;color:var(--primary);font-weight:600;">
+                  <div style="display:flex;align-items:center;gap:0.6rem;padding:0.65rem 0.85rem;background:var(--primary-subtle);border-radius:var(--radius-md);font-size:0.75rem;color:var(--primary);font-weight:600;flex-wrap:wrap;">
                     ${iconSvg('bell', 15)}
-                    <span style="flex:1;">Live Push: Work completed on CF-2026-0003 (Library Wi-Fi)</span>
+                    <span style="flex:1;min-width:160px;word-break:break-word;">Live Push: Work completed on CF-2026-0003 (Library Wi-Fi)</span>
                     <button onclick="openModal('track-modal');document.getElementById('track-search-input').value='CF-2026-0003';executeTrackSearch();" style="background:none;border:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-weight:700;padding:0;">View</button>
                   </div>
                 </div>
@@ -3198,10 +3585,10 @@
         <!-- About Section -->
         <section id="about" style="padding: 4.5rem 0;">
           <div class="container-custom">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;" class="about-grid">
+            <div class="about-grid">
               <div>
                 <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.05em;color:var(--primary);text-transform:uppercase;">About The System</span>
-                <h2 style="font-size:2.2rem;font-weight:800;letter-spacing:-0.03em;margin-top:0.4rem;color:var(--text-main);line-height:1.2;">
+                <h2 style="font-size:clamp(1.5rem, 4vw, 2.2rem);font-weight:800;letter-spacing:-0.03em;margin-top:0.4rem;color:var(--text-main);line-height:1.2;">
                   Engineered to Eliminate Campus Maintenance Friction
                 </h2>
                 <p style="font-size:0.95rem;color:var(--text-muted);margin-top:1rem;line-height:1.65;">
@@ -3237,7 +3624,7 @@
               </div>
 
               <!-- Why Campus Fix Card Showcase -->
-              <div class="card" style="padding:2rem;">
+              <div class="card" style="padding:clamp(1.25rem, 3vw, 2rem);">
                 <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:1.25rem;">Why Campus Fix?</h3>
                 <div style="display:flex;flex-direction:column;gap:1.25rem;">
                   <div style="padding-bottom:1rem;border-bottom:1px solid var(--border-color);">
@@ -3279,10 +3666,10 @@
         <!-- Call to Action Banner -->
         <section style="padding: 4.5rem 0; background: var(--bg-surface);">
           <div class="container-custom">
-            <div style="background: linear-gradient(135deg, var(--primary) 0%, #071f4a 100%); color: #fff; padding: 3.5rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-lg);">
-              <h2 style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem;">Ready to report a campus problem?</h2>
-              <p style="font-size: 1.05rem; opacity: 0.9; max-width: 580px; margin: 0 auto 2rem auto; line-height: 1.5;">Help us maintain a safe, clean, and top-tier learning environment across GNIOT Group of Institutions. Submit a request now in less than a minute.</p>
-              <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <div class="cta-banner">
+              <h2 style="font-size: clamp(1.4rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem;">Ready to report a campus problem?</h2>
+              <p style="font-size: clamp(0.875rem, 2.4vw, 1.05rem); opacity: 0.9; max-width: 580px; margin: 0 auto 1.75rem auto; line-height: 1.5;">Help us maintain a safe, clean, and top-tier learning environment across GNIOT Group of Institutions. Submit a request now in less than a minute.</p>
+              <div class="cta-banner-buttons" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
                 <button onclick="handleReportProblemClick()" class="btn btn-accent" style="padding:0.75rem 1.6rem;font-size:0.95rem;background:#f59e0b;color:#0f172a;font-weight:700;">
                   ${iconSvg('plus', 18)} Report a Problem Now
                 </button>
@@ -3463,6 +3850,35 @@
     }
 
 
+    let isMobileNavOpen = false;
+
+    function toggleMobileNav() {
+      isMobileNavOpen = !isMobileNavOpen;
+      const drawer = document.getElementById('mobile-nav-drawer');
+      const iconSpan = document.getElementById('mobile-menu-icon');
+      if (drawer) {
+        drawer.style.display = isMobileNavOpen ? 'block' : 'none';
+      }
+      if (isMobileNavOpen) {
+        closeNotificationsTray();
+      }
+      if (iconSpan) {
+        iconSpan.innerHTML = isMobileNavOpen ? iconSvg('x', 18) : iconSvg('menu', 18);
+      }
+    }
+
+    function closeMobileNav() {
+      isMobileNavOpen = false;
+      const drawer = document.getElementById('mobile-nav-drawer');
+      const iconSpan = document.getElementById('mobile-menu-icon');
+      if (drawer) {
+        drawer.style.display = 'none';
+      }
+      if (iconSpan) {
+        iconSpan.innerHTML = iconSvg('menu', 18);
+      }
+    }
+
     // Navbar Renderer
     function renderNavbar() {
       const session = getSession();
@@ -3506,19 +3922,19 @@
 
       return `
         <header class="navbar">
-          <div class="container-custom" style="display:flex;align-items:center;justify-content:space-between;height:65px;gap:1rem;">
+          <div class="container-custom" style="display:flex;align-items:center;justify-content:space-between;height:65px;gap:0.75rem;">
             <!-- Brand -->
-            <div style="display:flex;align-items:center;gap:1.25rem;">
-              <a href="javascript:void(0)" onclick="setView('landing')" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;color:var(--text-main);">
-                <img src="/gniot-logo.svg" alt="GNIOT Group of Institutions Logo" style="height:42px;width:auto;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.12);display:block;" />
-                <div style="border-left:1px solid var(--border-color);padding-left:0.75rem;">
-                  <div style="font-weight:800;font-size:1.15rem;letter-spacing:-0.02em;line-height:1.1;">Campus Fix</div>
-                  <div style="font-size:0.65rem;color:var(--text-muted);font-weight:700;letter-spacing:0.04em;">CAMPUS ERP SYSTEM</div>
+            <div style="display:flex;align-items:center;gap:1.25rem;min-width:0;flex-shrink:1;">
+              <a href="javascript:void(0)" onclick="setView('landing')" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--text-main);min-width:0;">
+                <img src="/gniot-logo.svg" alt="GNIOT Group of Institutions Logo" style="height:38px;width:auto;max-width:140px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.12);display:block;flex-shrink:0;" />
+                <div style="border-left:1px solid var(--border-color);padding-left:0.6rem;min-width:0;">
+                  <div style="font-weight:800;font-size:1.1rem;letter-spacing:-0.02em;line-height:1.1;white-space:nowrap;">Campus Fix</div>
+                  <div class="brand-subtext" style="font-size:0.62rem;color:var(--text-muted);font-weight:700;letter-spacing:0.04em;white-space:nowrap;">CAMPUS ERP SYSTEM</div>
                 </div>
               </a>
 
-              <!-- Nav Links -->
-              <nav style="display:none;align-items:center;gap:1.25rem;" class="desktop-nav-links">
+              <!-- Desktop Nav Links -->
+              <nav class="desktop-nav-links">
                 <a href="javascript:void(0)" onclick="setView('landing')" style="font-size:0.875rem;font-weight:500;color:var(--text-muted);text-decoration:none;" class="hover:text-primary">Home</a>
                 <a href="#how-it-works" onclick="if(currentView!=='landing'){setView('landing');setTimeout(()=>location.hash='#how-it-works',100);}" style="font-size:0.875rem;font-weight:500;color:var(--text-muted);text-decoration:none;">How It Works</a>
                 <a href="#features" onclick="if(currentView!=='landing'){setView('landing');setTimeout(()=>location.hash='#features',100);}" style="font-size:0.875rem;font-weight:500;color:var(--text-muted);text-decoration:none;">Features</a>
@@ -3528,8 +3944,8 @@
               </nav>
             </div>
 
-            <!-- Right Actions -->
-            <div style="display:flex;align-items:center;gap:0.6rem;">
+            <!-- Desktop Right Actions -->
+            <div class="desktop-right-actions">
               <!-- Quick Action: Report Problem -->
               <button onclick="handleReportProblemClick()" class="btn btn-primary btn-sm" style="box-shadow:0 2px 8px rgba(37,99,235,0.25);">
                 ${iconSvg('plus', 16)} <span>Report Problem</span>
@@ -3537,7 +3953,7 @@
 
               <!-- Quick Action: Track Ticket -->
               <button onclick="openModal('track-modal')" class="btn btn-secondary btn-sm">
-                ${iconSvg('search', 15)} <span class="hidden sm:inline">Track</span>
+                ${iconSvg('search', 15)} <span>Track</span>
               </button>
 
               <!-- Real-Time Push Notification Bell -->
@@ -3548,30 +3964,6 @@
                     ${unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 </button>
-
-                <!-- Notifications Tray Flyout -->
-                <div id="notif-tray-popover" style="display:none;position:absolute;right:0;top:44px;width:380px;max-width:calc(100vw - 2rem);background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:1100;overflow:hidden;">
-                  <div style="padding:0.85rem 1rem;border-bottom:1px solid var(--border-color);display:flex;align-items:center;justify-content:space-between;background:var(--bg-surface-subtle);">
-                    <div style="font-weight:700;font-size:0.875rem;display:flex;align-items:center;gap:0.4rem;">
-                      ${iconSvg('bell', 16)} <span>Push Notifications</span>
-                    </div>
-                    <div style="display:flex;gap:0.6rem;align-items:center;">
-                      <button onclick="markAllNotificationsRead()" style="background:none;border:none;color:var(--primary);font-size:0.75rem;cursor:pointer;font-weight:600;">Mark Read</button>
-                      <button onclick="clearAllNotifications()" style="background:none;border:none;color:var(--danger);font-size:0.75rem;cursor:pointer;font-weight:600;">Clear All</button>
-                      <button onclick="toggleNotificationsTray()" style="background:none;border:none;color:var(--text-subtle);cursor:pointer;padding:2px;">${iconSvg('x', 14)}</button>
-                    </div>
-                  </div>
-                  <!-- Role Filter Segmented Tabs -->
-                  <div style="display:flex;gap:0.35rem;padding:0.45rem 0.75rem;background:var(--bg-surface);border-bottom:1px solid var(--border-color);overflow-x:auto;">
-                    <button id="notif-filter-all" onclick="setNotifFilter('all')" class="btn btn-sm ${notifFilter==='all'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">All</button>
-                    <button id="notif-filter-student" onclick="setNotifFilter('student')" class="btn btn-sm ${notifFilter==='student'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">Student</button>
-                    <button id="notif-filter-staff" onclick="setNotifFilter('staff')" class="btn btn-sm ${notifFilter==='staff'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">Staff</button>
-                    <button id="notif-filter-admin" onclick="setNotifFilter('admin')" class="btn btn-sm ${notifFilter==='admin'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">Admin</button>
-                  </div>
-                  <div id="notif-items-container" style="max-height:360px;overflow-y:auto;padding:0.25rem 0;">
-                    <!-- Rendered by renderNotificationsList() -->
-                  </div>
-                </div>
               </div>
 
               <!-- Theme Toggle -->
@@ -3584,6 +3976,135 @@
                 ${authButtons}
               </div>
             </div>
+
+            <!-- Mobile Header Actions (Visible on < 1024px) -->
+            <div class="mobile-header-actions">
+              <!-- Quick Report Problem Button -->
+              <button onclick="handleReportProblemClick()" class="btn btn-primary btn-sm mobile-quick-report-btn" title="Report a Problem" style="box-shadow:0 2px 8px rgba(37,99,235,0.25);">
+                ${iconSvg('plus', 15)} <span class="mobile-report-text">Report</span>
+              </button>
+
+              <!-- Real-Time Push Notification Bell -->
+              <div style="position:relative;">
+                <button id="mobile-notif-bell-btn" onclick="toggleNotificationsTray()" class="btn btn-secondary btn-sm" style="padding:0.4rem 0.5rem;position:relative;" title="Live Notifications">
+                  ${iconSvg('bell', 16)}
+                  <span id="mobile-notif-badge-count" style="display:${unreadCount > 0 ? 'inline-flex' : 'none'};position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:0.62rem;font-weight:700;height:16px;min-width:16px;border-radius:8px;padding:0 3px;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--bg-surface);">
+                    ${unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                </button>
+              </div>
+
+              <!-- Theme Toggle -->
+              <button id="mobile-theme-toggle-btn" onclick="toggleTheme()" class="btn btn-secondary btn-sm" style="padding:0.4rem 0.5rem;" title="Toggle theme">
+                ${iconSvg('moon', 16)}
+              </button>
+
+              <!-- Hamburger Toggle Button -->
+              <button id="mobile-menu-btn" onclick="toggleMobileNav()" class="btn btn-secondary btn-sm" style="padding:0.4rem 0.55rem;" aria-label="Toggle Navigation Menu">
+                <span id="mobile-menu-icon">${isMobileNavOpen ? iconSvg('x', 18) : iconSvg('menu', 18)}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Notifications Tray Flyout (Shared across desktop and mobile) -->
+          <div id="notif-tray-popover" class="notif-tray-popover">
+            <div style="padding:0.85rem 1rem;border-bottom:1px solid var(--border-color);display:flex;align-items:center;justify-content:space-between;background:var(--bg-surface-subtle);">
+              <div style="font-weight:700;font-size:0.875rem;display:flex;align-items:center;gap:0.4rem;">
+                ${iconSvg('bell', 16)} <span>Push Notifications</span>
+              </div>
+              <div style="display:flex;gap:0.6rem;align-items:center;">
+                <button onclick="markAllNotificationsRead()" style="background:none;border:none;color:var(--primary);font-size:0.75rem;cursor:pointer;font-weight:600;">Mark Read</button>
+                <button onclick="clearAllNotifications()" style="background:none;border:none;color:var(--danger);font-size:0.75rem;cursor:pointer;font-weight:600;">Clear All</button>
+                <button onclick="toggleNotificationsTray()" style="background:none;border:none;color:var(--text-subtle);cursor:pointer;padding:2px;">${iconSvg('x', 14)}</button>
+              </div>
+            </div>
+            <!-- Role Filter Segmented Tabs -->
+            <div style="display:flex;gap:0.35rem;padding:0.45rem 0.75rem;background:var(--bg-surface);border-bottom:1px solid var(--border-color);overflow-x:auto;">
+              <button id="notif-filter-all" onclick="setNotifFilter('all')" class="btn btn-sm ${notifFilter==='all'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">All</button>
+              <button id="notif-filter-student" onclick="setNotifFilter('student')" class="btn btn-sm ${notifFilter==='student'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">Student</button>
+              <button id="notif-filter-staff" onclick="setNotifFilter('staff')" class="btn btn-sm ${notifFilter==='staff'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">Staff</button>
+              <button id="notif-filter-admin" onclick="setNotifFilter('admin')" class="btn btn-sm ${notifFilter==='admin'?'btn-primary':'btn-secondary'}" style="padding:0.2rem 0.55rem;font-size:0.72rem;">Admin</button>
+            </div>
+            <div id="notif-items-container" style="max-height:360px;overflow-y:auto;padding:0.25rem 0;">
+              <!-- Rendered by renderNotificationsList() -->
+            </div>
+          </div>
+
+          <!-- Mobile Dropdown Navigation Drawer -->
+          <div id="mobile-nav-drawer" class="mobile-nav-drawer" style="display:${isMobileNavOpen ? 'block' : 'none'};">
+            <!-- Quick Actions Full Width -->
+            <div style="display:flex;flex-direction:column;gap:0.55rem;margin-bottom:1rem;">
+              <button onclick="handleReportProblemClick(); closeMobileNav();" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.7rem 1rem;font-size:0.9rem;">
+                ${iconSvg('plus', 16)} Report a Problem
+              </button>
+              <button onclick="openModal('track-modal'); closeMobileNav();" class="btn btn-secondary" style="width:100%;justify-content:center;padding:0.65rem 1rem;font-size:0.9rem;">
+                ${iconSvg('search', 16)} Track Complaint Status
+              </button>
+            </div>
+
+            <!-- Role & Authentication Box -->
+            <div style="background:var(--bg-surface-subtle);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:0.85rem;margin-bottom:1rem;">
+              ${session ? `
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+                  <div>
+                    <div style="font-weight:700;font-size:0.875rem;color:var(--text-main);">${escapeHtml(session.user.name)}</div>
+                    <div style="font-size:0.72rem;color:var(--text-muted);text-transform:capitalize;">${session.role} Portal &middot; ${escapeHtml(session.user.id || session.user.email || '')}</div>
+                  </div>
+                  <button onclick="clearSession(); closeMobileNav();" class="btn btn-secondary btn-sm" style="font-size:0.75rem;padding:0.3rem 0.6rem;" title="Sign Out">
+                    ${iconSvg('log-out', 13)} Sign Out
+                  </button>
+                </div>
+                <div>
+                  ${session.role === 'admin' ? `
+                    <button onclick="setView('admin-dashboard'); closeMobileNav();" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">Open Admin Console &rarr;</button>
+                  ` : session.role === 'staff' ? `
+                    <button onclick="setView('staff-dashboard'); closeMobileNav();" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">View My Tasks &rarr;</button>
+                  ` : `
+                    <button onclick="setView('student-dashboard'); closeMobileNav();" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">Go to Student Dashboard &rarr;</button>
+                  `}
+                </div>
+              ` : `
+                <div style="font-size:0.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">
+                  Campus ERP Portals
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+                  <button onclick="openModal('auth-modal'); closeMobileNav();" class="btn btn-accent btn-sm" style="justify-content:center;font-weight:700;background:#f59e0b;color:#0f172a;font-size:0.825rem;padding:0.5rem 0.5rem;">
+                    ${iconSvg('user', 14)} Student Login
+                  </button>
+                  <button onclick="setView('admin-signin'); closeMobileNav();" class="btn btn-secondary btn-sm" style="justify-content:center;font-size:0.825rem;padding:0.5rem 0.5rem;">
+                    ${iconSvg('shield', 14)} Admin Portal
+                  </button>
+                </div>
+                <button onclick="openStaffSwitchModal(); closeMobileNav();" class="btn btn-secondary btn-sm" style="width:100%;justify-content:center;font-size:0.825rem;padding:0.5rem 0.75rem;">
+                  ${iconSvg('users', 14)} Maintenance Staff Portal
+                </button>
+              `}
+            </div>
+
+            <!-- Mobile Navigation Links -->
+            <div style="font-size:0.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;padding:0 0.5rem 0.35rem 0.5rem;">
+              Site Navigation
+            </div>
+            <nav style="display:flex;flex-direction:column;">
+              <a href="javascript:void(0)" onclick="setView('landing'); closeMobileNav();" class="mobile-nav-link">
+                <span>Home</span> ${iconSvg('arrow-right', 14)}
+              </a>
+              <a href="#how-it-works" onclick="if(currentView!=='landing'){setView('landing');setTimeout(()=>location.hash='#how-it-works',100);} closeMobileNav();" class="mobile-nav-link">
+                <span>How It Works</span> ${iconSvg('arrow-right', 14)}
+              </a>
+              <a href="#features" onclick="if(currentView!=='landing'){setView('landing');setTimeout(()=>location.hash='#features',100);} closeMobileNav();" class="mobile-nav-link">
+                <span>Features</span> ${iconSvg('arrow-right', 14)}
+              </a>
+              <a href="#categories" onclick="if(currentView!=='landing'){setView('landing');setTimeout(()=>location.hash='#categories',100);} closeMobileNav();" class="mobile-nav-link">
+                <span>Maintenance Categories</span> ${iconSvg('arrow-right', 14)}
+              </a>
+              <a href="#about" onclick="if(currentView!=='landing'){setView('landing');setTimeout(()=>location.hash='#about',100);} closeMobileNav();" class="mobile-nav-link">
+                <span>About The System</span> ${iconSvg('arrow-right', 14)}
+              </a>
+              <a href="#faq" onclick="if(currentView!=='landing'){setView('landing');setTimeout(()=>location.hash='#faq',100);} closeMobileNav();" class="mobile-nav-link">
+                <span>Frequently Asked Questions</span> ${iconSvg('arrow-right', 14)}
+              </a>
+            </nav>
           </div>
         </header>
       `;
@@ -3595,6 +4116,9 @@
       const isVisible = popover.style.display === 'block';
       popover.style.display = isVisible ? 'none' : 'block';
       if (!isVisible) {
+        if (typeof isMobileNavOpen !== 'undefined' && isMobileNavOpen) {
+          closeMobileNav();
+        }
         renderNotificationsList();
       }
     }
@@ -3725,6 +4249,11 @@
     function openModal(id) {
       const el = document.getElementById(id);
       if (el) {
+        if (id === 'auth-modal') {
+          switchAuthTab('signin');
+        } else if (id === 'admin-modal') {
+          switchAdminAuthTab('signin', 'modal');
+        }
         el.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
@@ -3832,16 +4361,16 @@
 
               <div class="form-group">
                 <label class="form-label">Email or Student ID</label>
-                <input type="text" id="signin-identifier" class="form-input" placeholder="e.g. aarav.mehta@gniot.net.in or GNIOT-2024-CSE-0142" value="aarav.mehta@gniot.net.in" required />
+                <input type="text" id="signin-identifier" class="form-input" placeholder="Enter your campus email or Student ID" autocomplete="username" required />
               </div>
 
               <div class="form-group">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem;">
                   <label class="form-label" style="margin:0;">Password</label>
-                  <a href="javascript:void(0)" onclick="showToast('Password Recovery', 'Sign in with student123 or register a new campus account.', 'info')" style="font-size:0.75rem;color:var(--primary);text-decoration:none;">Forgot password?</a>
+                  <a href="javascript:void(0)" onclick="showToast('Password Recovery', 'Please contact GNIOT IT Helpdesk or your department coordinator to reset your student password.', 'info')" style="font-size:0.75rem;color:var(--primary);text-decoration:none;">Forgot password?</a>
                 </div>
                 <div style="position:relative;">
-                  <input type="password" id="signin-password" class="form-input" value="student123" required />
+                  <input type="password" id="signin-password" class="form-input" placeholder="Enter your password" autocomplete="current-password" required />
                   <button type="button" onclick="togglePasswordVisibility('signin-password', this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-subtle);cursor:pointer;padding:0;">
                     ${iconSvg('eye', 16)}
                   </button>
@@ -3853,12 +4382,12 @@
                 <label for="signin-remember">Remember this browser session</label>
               </div>
 
-              <button type="submit" class="btn btn-primary" style="width:100%;padding:0.75rem;">
+              <button type="submit" class="btn btn-primary" style="width:100%;padding:0.75rem;font-weight:700;">
                 Sign In to Dashboard &rarr;
               </button>
 
-              <div style="margin-top:1rem;padding:0.65rem 0.85rem;background:var(--bg-surface-subtle);border-radius:var(--radius-md);font-size:0.75rem;color:var(--text-muted);text-align:center;">
-                Student Credentials: <strong>aarav.mehta@gniot.net.in</strong> / <strong>student123</strong>
+              <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-color);text-align:center;font-size:0.825rem;color:var(--text-muted);">
+                Don't have an account? <a href="javascript:void(0)" onclick="switchAuthTab('signup')" style="color:var(--primary);font-weight:700;text-decoration:none;">Create Student Account &rarr;</a>
               </div>
             </form>
 
@@ -3867,32 +4396,32 @@
               <h3 style="font-size:1.3rem;font-weight:800;margin-bottom:0.35rem;">Student Registration</h3>
               <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">Create your GNIOT maintenance profile</p>
 
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+              <div class="form-row-2col">
                 <div class="form-group">
                   <label class="form-label">Full Name</label>
-                  <input type="text" id="signup-name" class="form-input" placeholder="e.g. Diya Sharma" required />
+                  <input type="text" id="signup-name" class="form-input" placeholder="e.g. Diya Sharma" autocomplete="name" required />
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Student ID</label>
-                  <input type="text" id="signup-id" class="form-input" placeholder="e.g. GNIOT-2026-CSE-0912" required />
+                  <label class="form-label">Student ID (Optional)</label>
+                  <input type="text" id="signup-id" class="form-input" placeholder="e.g. GNIOT-2026-CSE-0912" autocomplete="off" />
                 </div>
               </div>
 
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+              <div class="form-row-2col">
                 <div class="form-group">
                   <label class="form-label">Campus Email</label>
-                  <input type="email" id="signup-email" class="form-input" placeholder="student@gniot.net.in" required />
+                  <input type="email" id="signup-email" class="form-input" placeholder="student@gniot.net.in" autocomplete="email" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label">Phone Number</label>
-                  <input type="tel" id="signup-phone" class="form-input" placeholder="+91 98000 00000" required />
+                  <input type="tel" id="signup-phone" class="form-input" placeholder="+91 98000 00000" autocomplete="tel" required />
                 </div>
               </div>
 
-              <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:0.75rem;">
+              <div class="form-row-2col">
                 <div class="form-group">
                   <label class="form-label">Course / Department</label>
-                  <input type="text" id="signup-dept" class="form-input" placeholder="e.g. Computer Science (B.Tech)" required />
+                  <input type="text" id="signup-dept" class="form-input" placeholder="e.g. Computer Science (B.Tech)" autocomplete="organization-title" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label">Year / Sem</label>
@@ -3906,20 +4435,24 @@
                 </div>
               </div>
 
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+              <div class="form-row-2col">
                 <div class="form-group">
                   <label class="form-label">Password</label>
-                  <input type="password" id="signup-password" class="form-input" placeholder="Min 6 characters" required />
+                  <input type="password" id="signup-password" class="form-input" placeholder="Create secure password" autocomplete="new-password" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label">Confirm Password</label>
-                  <input type="password" id="signup-confirm" class="form-input" placeholder="Repeat password" required />
+                  <input type="password" id="signup-confirm" class="form-input" placeholder="Repeat password" autocomplete="new-password" required />
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-primary" style="width:100%;padding:0.75rem;margin-top:0.5rem;">
+              <button type="submit" class="btn btn-primary" style="width:100%;padding:0.75rem;margin-top:0.5rem;font-weight:700;">
                 Complete Registration &rarr;
               </button>
+
+              <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-color);text-align:center;font-size:0.825rem;color:var(--text-muted);">
+                Already have an account? <a href="javascript:void(0)" onclick="switchAuthTab('signin')" style="color:var(--primary);font-weight:700;text-decoration:none;">Sign In &rarr;</a>
+              </div>
             </form>
           </div>
         </div>
@@ -3945,7 +4478,7 @@
 
               <div class="form-group">
                 <label class="form-label">Official Email or Employee ID</label>
-                <input type="text" id="admin-signin-identifier" class="form-input" placeholder="e.g. ayushjaiswal272008@gmail.com" value="ayushjaiswal272008@gmail.com" required />
+                <input type="text" id="admin-signin-identifier" class="form-input" placeholder="e.g. ayushjaiswal272008@gmail.com" autocomplete="username" required />
               </div>
 
               <div class="form-group">
@@ -3954,7 +4487,7 @@
                   <a href="javascript:void(0)" onclick="showToast('Password Support', 'Contact Primary Administrator (ayushjaiswal272008@gmail.com) for password resets.', 'info')" style="font-size:0.75rem;color:var(--primary);text-decoration:none;">Forgot password?</a>
                 </div>
                 <div style="position:relative;">
-                  <input type="password" id="admin-signin-password" class="form-input" placeholder="Enter secure administrator password" required />
+                  <input type="password" id="admin-signin-password" class="form-input" placeholder="Enter secure administrator password" autocomplete="current-password" required />
                   <button type="button" onclick="togglePasswordVisibility('admin-signin-password', this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-subtle);cursor:pointer;padding:0;">
                     ${iconSvg('eye', 16)}
                   </button>
@@ -4044,29 +4577,29 @@
 
             <div id="complaint-form-wrapper">
               <form onsubmit="handleComplaintSubmit(event)" class="modal-body">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="form-row-2col">
                   <div class="form-group">
                     <label class="form-label">Student Name</label>
-                    <input type="text" id="comp-name" class="form-input" required />
+                    <input type="text" id="comp-name" class="form-input" placeholder="Enter student full name" autocomplete="name" required />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Phone / WhatsApp Contact</label>
-                    <input type="tel" id="comp-contact" class="form-input" placeholder="+91 98000 00000" required />
+                    <input type="tel" id="comp-contact" class="form-input" placeholder="+91 98000 00000" autocomplete="tel" required />
                   </div>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="form-row-2col">
                   <div class="form-group">
                     <label class="form-label">Campus Email</label>
-                    <input type="email" id="comp-email" class="form-input" placeholder="student@gniot.net.in" required />
+                    <input type="email" id="comp-email" class="form-input" placeholder="student@gniot.net.in" autocomplete="email" required />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Student ID (Optional)</label>
-                    <input type="text" id="comp-studentid" class="form-input" placeholder="e.g. GNIOT-2024-CSE-0142" />
+                    <input type="text" id="comp-studentid" class="form-input" placeholder="e.g. GNIOT-2024-CSE-0142" autocomplete="off" />
                   </div>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:0.75rem;">
+                <div class="form-row-2col">
                   <div class="form-group">
                     <label class="form-label">Building / Block / Hostel</label>
                     <input type="text" id="comp-building" class="form-input" list="campus-buildings-list" placeholder="e.g. APJ Abdul Kalam Block A" required />
@@ -4089,7 +4622,7 @@
                   </div>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="form-row-2col">
                   <div class="form-group">
                     <label class="form-label">Maintenance Category</label>
                     <select id="comp-category" class="form-select" onchange="updateSubCategoryDropdown(this.value)" required>
@@ -4104,7 +4637,7 @@
                   </div>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="form-row-2col">
                   <div class="form-group">
                     <label class="form-label">Urgency Priority</label>
                     <select id="comp-priority" class="form-select" required>
@@ -4429,7 +4962,7 @@
                 <form id="page-admin-signin-form" onsubmit="handleAdminSignIn(event, 'page')" style="display: block;">
                   <div class="form-group">
                     <label class="form-label" style="font-weight: 700;">Official Email or Employee ID</label>
-                    <input type="text" id="page-admin-signin-identifier" class="form-input" placeholder="e.g. ayushjaiswal272008@gmail.com" value="ayushjaiswal272008@gmail.com" required style="padding: 0.75rem 0.95rem;" />
+                    <input type="text" id="page-admin-signin-identifier" class="form-input" placeholder="e.g. ayushjaiswal272008@gmail.com" autocomplete="username" required style="padding: 0.75rem 0.95rem;" />
                   </div>
 
                   <div class="form-group">
@@ -4438,7 +4971,7 @@
                       <a href="javascript:void(0)" onclick="showToast('Password Support', 'Contact Primary Administrator (ayushjaiswal272008@gmail.com) for assistance.', 'info')" style="font-size:0.75rem;color:var(--primary);text-decoration:none;font-weight:600;">Forgot password?</a>
                     </div>
                     <div style="position:relative;">
-                      <input type="password" id="page-admin-signin-password" class="form-input" placeholder="Enter secure administrator password" required style="padding: 0.75rem 0.95rem;" />
+                      <input type="password" id="page-admin-signin-password" class="form-input" placeholder="Enter secure administrator password" autocomplete="current-password" required style="padding: 0.75rem 0.95rem;" />
                       <button type="button" onclick="togglePasswordVisibility('page-admin-signin-password', this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-subtle);cursor:pointer;padding:0;">
                         ${iconSvg('eye', 16)}
                       </button>
@@ -4541,7 +5074,7 @@
               <div style="padding: 1.75rem 1.75rem 1.25rem 1.75rem; border-bottom: 1px solid var(--border-color); background: var(--bg-surface); text-align: center;">
                 <img src="/gniot-logo.svg" alt="GNIOT Group of Institutions" style="height:46px; max-width:240px; margin:0 auto 0.75rem auto; display:block; border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.1);" />
                 <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-main);line-height:1.2;">Student Sign In</h2>
-                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.75rem;">GNIOT GROUP OF INSTITUTIONS &middot; CAMPUS FIX</div>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin:0.35rem auto 0.75rem auto;line-height:1.4;">Access your GNIOT maintenance dashboard and track complaints</p>
 
                 <div style="display:flex;gap:0.5rem;background:var(--bg-surface-subtle);padding:0.25rem;border-radius:var(--radius-md);">
                   <button id="page-student-tab-signin" class="tab-btn active" style="flex:1;" onclick="switchPageStudentAuthTab('signin')">Sign In</button>
@@ -4553,32 +5086,38 @@
                 <form id="page-student-signin-form" onsubmit="handleStudentSignIn(event, 'page')" style="display:block;">
                   <div class="form-group">
                     <label class="form-label">Email or Student ID</label>
-                    <input type="text" id="page-signin-identifier" class="form-input" placeholder="e.g. aarav.mehta@gniot.net.in" value="aarav.mehta@gniot.net.in" required />
+                    <input type="text" id="page-signin-identifier" class="form-input" placeholder="Enter your campus email or Student ID" autocomplete="username" required />
                   </div>
 
                   <div class="form-group">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem;">
                       <label class="form-label" style="margin:0;">Password</label>
-                      <a href="javascript:void(0)" onclick="showToast('Password Recovery', 'Sign in with student123 or register a new campus account.', 'info')" style="font-size:0.75rem;color:var(--primary);text-decoration:none;">Forgot password?</a>
+                      <a href="javascript:void(0)" onclick="showToast('Password Recovery', 'Please contact GNIOT IT Helpdesk or your department coordinator to reset your student password.', 'info')" style="font-size:0.75rem;color:var(--primary);text-decoration:none;">Forgot password?</a>
                     </div>
                     <div style="position:relative;">
-                      <input type="password" id="page-signin-password" class="form-input" value="student123" required />
+                      <input type="password" id="page-signin-password" class="form-input" placeholder="Enter your password" autocomplete="current-password" required />
                       <button type="button" onclick="togglePasswordVisibility('page-signin-password', this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-subtle);cursor:pointer;padding:0;">
                         ${iconSvg('eye', 16)}
                       </button>
                     </div>
                   </div>
 
+                  <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;font-size:0.8rem;color:var(--text-muted);">
+                    <input type="checkbox" id="page-signin-remember" checked />
+                    <label for="page-signin-remember">Remember this browser session</label>
+                  </div>
+
                   <button type="submit" class="btn btn-primary" style="width:100%;padding:0.75rem;font-weight:700;">
                     Sign In to Dashboard &rarr;
                   </button>
 
-                  <div style="margin-top:1rem;padding:0.65rem 0.85rem;background:var(--bg-surface-subtle);border-radius:var(--radius-md);font-size:0.75rem;color:var(--text-muted);text-align:center;">
-                    Demo Account: <strong>aarav.mehta@gniot.net.in</strong> / <strong>student123</strong>
-                  </div>
-
-                  <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border-color);text-align:center;font-size:0.825rem;color:var(--text-muted);">
-                    Campus Administrator? <a href="javascript:void(0)" onclick="setView('admin-signin')" style="color:var(--primary);text-decoration:none;font-weight:600;">Admin Sign In &rarr;</a>
+                  <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-color);display:flex;align-items:center;justify-content:space-between;font-size:0.825rem;color:var(--text-muted);flex-wrap:wrap;gap:0.5rem;">
+                    <div>
+                      Don't have an account? <a href="javascript:void(0)" onclick="switchPageStudentAuthTab('signup')" style="color:var(--primary);font-weight:700;text-decoration:none;">Create Student Account &rarr;</a>
+                    </div>
+                    <div>
+                      Campus Administrator? <a href="javascript:void(0)" onclick="setView('admin-signin')" style="color:var(--primary);text-decoration:none;font-weight:600;">Admin Sign In &rarr;</a>
+                    </div>
                   </div>
                 </form>
 
@@ -4586,29 +5125,29 @@
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
                     <div class="form-group">
                       <label class="form-label">Full Name</label>
-                      <input type="text" id="page-signup-name" class="form-input" placeholder="e.g. Diya Sharma" required />
+                      <input type="text" id="page-signup-name" class="form-input" placeholder="e.g. Diya Sharma" autocomplete="name" required />
                     </div>
                     <div class="form-group">
-                      <label class="form-label">Student ID</label>
-                      <input type="text" id="page-signup-id" class="form-input" placeholder="e.g. GNIOT-2026-CSE-0912" required />
+                      <label class="form-label">Student ID (Optional)</label>
+                      <input type="text" id="page-signup-id" class="form-input" placeholder="e.g. GNIOT-2026-CSE-0912" autocomplete="off" />
                     </div>
                   </div>
 
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
                     <div class="form-group">
                       <label class="form-label">Campus Email</label>
-                      <input type="email" id="page-signup-email" class="form-input" placeholder="student@gniot.net.in" required />
+                      <input type="email" id="page-signup-email" class="form-input" placeholder="student@gniot.net.in" autocomplete="email" required />
                     </div>
                     <div class="form-group">
                       <label class="form-label">Phone Number</label>
-                      <input type="tel" id="page-signup-phone" class="form-input" placeholder="+91 98000 00000" required />
+                      <input type="tel" id="page-signup-phone" class="form-input" placeholder="+91 98000 00000" autocomplete="tel" required />
                     </div>
                   </div>
 
                   <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:0.75rem;">
                     <div class="form-group">
                       <label class="form-label">Department</label>
-                      <input type="text" id="page-signup-dept" class="form-input" placeholder="e.g. Computer Science (B.Tech)" required />
+                      <input type="text" id="page-signup-dept" class="form-input" placeholder="e.g. Computer Science (B.Tech)" autocomplete="organization-title" required />
                     </div>
                     <div class="form-group">
                       <label class="form-label">Year</label>
@@ -4624,17 +5163,21 @@
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
                     <div class="form-group">
                       <label class="form-label">Password</label>
-                      <input type="password" id="page-signup-password" class="form-input" placeholder="Min 6 characters" required />
+                      <input type="password" id="page-signup-password" class="form-input" placeholder="Create secure password" autocomplete="new-password" required />
                     </div>
                     <div class="form-group">
                       <label class="form-label">Confirm Password</label>
-                      <input type="password" id="page-signup-confirm" class="form-input" placeholder="Repeat password" required />
+                      <input type="password" id="page-signup-confirm" class="form-input" placeholder="Repeat password" autocomplete="new-password" required />
                     </div>
                   </div>
 
                   <button type="submit" class="btn btn-primary" style="width:100%;padding:0.75rem;margin-top:0.5rem;font-weight:700;">
                     Complete Registration &rarr;
                   </button>
+
+                  <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-color);text-align:center;font-size:0.825rem;color:var(--text-muted);">
+                    Already have an account? <a href="javascript:void(0)" onclick="switchPageStudentAuthTab('signin')" style="color:var(--primary);font-weight:700;text-decoration:none;">Sign In &rarr;</a>
+                  </div>
                 </form>
               </div>
             </div>
@@ -4961,6 +5504,20 @@
         }
       }
 
+      if (viewName === 'student-dashboard' || viewName === 'complaint-history') {
+        const session = getSession();
+        if (!session || session.role !== 'student') {
+          showToast('Sign In Required', 'Please sign in to access your student maintenance dashboard.', 'info');
+          currentView = 'student-signin';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          renderApp();
+          updateNavSession();
+          return;
+        }
+      }
+
+      isMobileNavOpen = false;
+      closeNotificationsTray();
       currentView = viewName;
       window.scrollTo({ top: 0, behavior: 'smooth' });
       renderApp();
@@ -4987,11 +5544,11 @@
         if (emailInp) emailInp.value = session.user.email || '';
         if (studentIdInp) studentIdInp.value = session.user.id || '';
         if (contactInp) contactInp.value = session.user.phone || '';
-      } else if (!nameInp.value) {
-        if (nameInp) nameInp.value = 'Aarav Mehta';
-        if (emailInp) emailInp.value = 'aarav.mehta@gniot.net.in';
-        if (studentIdInp) studentIdInp.value = 'GNIOT-2024-CSE-0142';
-        if (contactInp) contactInp.value = '+91 98111 22334';
+      } else {
+        if (nameInp) nameInp.value = '';
+        if (emailInp) emailInp.value = '';
+        if (studentIdInp) studentIdInp.value = '';
+        if (contactInp) contactInp.value = '';
       }
 
       const catSelect = document.getElementById('comp-category');
@@ -5304,8 +5861,8 @@
                document.getElementById('page-signin-password')?.value;
       }
 
-      if (!idOrEmail) {
-        showToast('Input Required', 'Please provide your campus student email or ID.', 'warning');
+      if (!idOrEmail || !pass) {
+        showToast('Input Required', 'Please enter your campus email or Student ID, and your password.', 'warning');
         return;
       }
 
@@ -5316,27 +5873,24 @@
       );
 
       if (!student) {
-        // For convenience in prototype, auto-register student if not found
-        const newStu = {
-          id: idOrEmail.includes('@') ? 'GNIOT-2026-CSE-' + Math.floor(1000 + Math.random() * 9000) : idOrEmail,
-          name: idOrEmail.split('@')[0].replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-          email: idOrEmail.includes('@') ? idOrEmail : `${idOrEmail.toLowerCase()}@gniot.net.in`,
-          phone: '+91 98111 22334',
-          dept: 'Computer Science & Engineering (B.Tech)',
-          status: 'Active',
-          registeredAt: new Date().toISOString().split('T')[0]
-        };
-        db.students = db.students || [];
-        db.students.push(newStu);
-        saveDB(db);
-        setSession('student', newStu);
-        closeModal('auth-modal');
-        showToast('Welcome!', `Logged in as ${newStu.name}`, 'success');
-        setView('student-dashboard');
+        showToast('Account Not Found', 'No student account matches this Email or Student ID. Please click "Sign Up" or "Create Account" to register.', 'danger');
         return;
       }
 
-      setSession('student', student);
+      // Session persistence check
+      const rememberInput = document.getElementById(prefix + 'remember') || 
+                            document.getElementById('signin-remember') || 
+                            document.getElementById('page-signin-remember');
+      const shouldRemember = rememberInput ? rememberInput.checked : true;
+
+      if (!shouldRemember) {
+        try { sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ role: 'student', user: student })); } catch (err) {}
+        try { localStorage.removeItem(SESSION_STORAGE_KEY); } catch (err) {}
+        updateNavSession();
+      } else {
+        setSession('student', student);
+      }
+
       closeModal('auth-modal');
       showToast('Welcome Back!', `Signed in as ${student.name}`, 'success');
       setView('student-dashboard');
